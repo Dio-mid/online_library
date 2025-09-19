@@ -24,5 +24,4 @@ book_genre = Table(
     Base.metadata,
     Column("book_id", PG_UUID(as_uuid=True), ForeignKey("books.id", ondelete="CASCADE"), primary_key=True),
     Column("genre_id", PG_UUID(as_uuid=True), ForeignKey("genres.id", ondelete="CASCADE"), primary_key=True),
-    # Вместо отдельного id — составной PK, который обеспечивает уникальность пары
 )

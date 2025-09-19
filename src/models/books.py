@@ -26,7 +26,7 @@ class BooksOrm(Base):
     author_id: Mapped[uuid.UUID] = mapped_column(
         PG_UUID(as_uuid=True), ForeignKey("authors.id", ondelete="CASCADE"), nullable=False, index=True
     )
-    author: Mapped[list["AuthorsOrm"]] = relationship(back_populates="books")  # type: ignore[name-defined]
+    authors: Mapped[list["AuthorsOrm"]] = relationship(back_populates="books")  # type: ignore[name-defined]
 
     # Рейтинг хранится и пересчитывается фоново на основе отзывов
     rating: Mapped[float] = mapped_column(

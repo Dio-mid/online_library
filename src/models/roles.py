@@ -11,7 +11,6 @@ class RolesOrm(Base):
 
     id: Mapped[uuid.UUID] = uuid_pk()
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False, index=True)
-    # JSON c набором разрешений: {"can_publish": true, "can_delete": false, ...}
     permissions: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
 
     users: Mapped[list["UsersOrm"]] = relationship(back_populates="roles", cascade="all,delete", passive_deletes=True)

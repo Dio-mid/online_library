@@ -20,10 +20,10 @@ class UsersOrm(Base):
     role_id: Mapped[uuid.UUID | None] = mapped_column(
         PG_UUID(as_uuid=True), ForeignKey("roles.id", ondelete="SET NULL"), nullable=True
     )
-    role: Mapped[Optional["RolesOrm"]] = relationship(back_populates="users")
+    roles: Mapped[Optional["RolesOrm"]] = relationship(back_populates="users")
 
     # one-to-one с Author (обратная связь)
-    author: Mapped[Optional["AuthorsOrm"]] = relationship(  # type: ignore[name-defined]
+    authors: Mapped[Optional["AuthorsOrm"]] = relationship(  # type: ignore[name-defined]
         back_populates="users", uselist=False, cascade="all,delete", passive_deletes=True
     )
 

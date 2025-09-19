@@ -1,0 +1,13 @@
+from uuid import UUID
+from pydantic import BaseModel
+
+class FavouriteCreate(BaseModel):
+    book_id: UUID
+
+class FavouriteRead(BaseModel):
+    id: UUID
+    user_id: UUID
+    book_id: UUID
+
+    class Config:
+        orm_mode = True

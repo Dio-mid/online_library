@@ -19,8 +19,8 @@ class FavouritesOrm(Base):
         PG_UUID(as_uuid=True), ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True
     )
 
-    user: Mapped[list["UsersOrm"]] = relationship(back_populates="favourites")  # type: ignore[name-defined]
-    book: Mapped[list["BooksOrm"]] = relationship(back_populates="favourites")  # type: ignore[name-defined]
+    users: Mapped[list["UsersOrm"]] = relationship(back_populates="favourites")  # type: ignore[name-defined]
+    books: Mapped[list["BooksOrm"]] = relationship(back_populates="favourites")  # type: ignore[name-defined]
 
     __table_args__ = (
         UniqueConstraint("user_id", "book_id", name="uq_fav_user_book"),

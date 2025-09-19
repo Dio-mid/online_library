@@ -18,7 +18,7 @@ class AuthorsOrm(Base):
     bio: Mapped[Optional[str]] = mapped_column(String(2000), nullable=True)
     profile_picture: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
 
-    user: Mapped[list["UserOrm"]] = relationship(back_populates="authors")  # type: ignore[name-defined]
+    users: Mapped[list["UsersOrm"]] = relationship(back_populates="authors")  # type: ignore[name-defined]
     books: Mapped[list["BooksOrm"]] = relationship(  # type: ignore[name-defined]
         back_populates="authors", cascade="all,delete-orphan", passive_deletes=True
     )
