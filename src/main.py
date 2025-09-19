@@ -28,6 +28,6 @@ app.include_router(router_genres)
 app.include_router(router_reviews)
 app.include_router(router_favourites)
 
-
+#coment for pr
 if __name__ == "__main__":
     uvicorn.run("main:app")
