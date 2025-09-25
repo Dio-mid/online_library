@@ -9,19 +9,11 @@ from src.database import Base, uuid_pk
 
 class FavouritesOrm(Base):
     __tablename__ = "favourites"
+    # composite primary key: user_id + book_id
+    user_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    book_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("books.id", ondelete="CASCADE"), primary_key=True)
 
-    id: Mapped[uuid.UUID] = uuid_pk()
+    user: Mapped["UsersOrm"] = relationship(back_populates="favourites") # type: ignore[name-defined]
+    book: Mapped["BooksOrm"] = relationship(back_populates="favourites") # type: ignore[name-defined]
 
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
-    )
-    book_id: Mapped[uuid.UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("books.id", ondelete="CASCADE"), nullable=False, index=True
-    )
-
-    users: Mapped[list["UsersOrm"]] = relationship(back_populates="favourites")  # type: ignore[name-defined]
-    books: Mapped[list["BooksOrm"]] = relationship(back_populates="favourites")  # type: ignore[name-defined]
-
-    __table_args__ = (
-        UniqueConstraint("user_id", "book_id", name="uq_fav_user_book"),
-    )
+    __table_args__ = (UniqueConstraint("user_id", "book_id", name="uq_fav_user_book"),)

@@ -8,7 +8,6 @@ sys.path.append(
     str(Path(__file__).parent.parent)
 )
 
-from src.api.roles import router as router_roles
 from src.api.auth import router as router_auth
 from src.api.users import router as router_users
 from src.api.authors import router as router_authors
@@ -19,7 +18,6 @@ from src.api.favourites import router as router_favourites
 
 app = FastAPI()
 
-app.include_router(router_roles)
 app.include_router(router_auth)
 app.include_router(router_users)
 app.include_router(router_authors)

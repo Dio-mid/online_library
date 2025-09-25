@@ -1,5 +1,6 @@
 import uuid
 
+from typing import List
 from sqlalchemy import String, Table, Column, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
@@ -13,9 +14,7 @@ class GenresOrm(Base):
     id: Mapped[uuid.UUID] = uuid_pk()
     name: Mapped[str] = mapped_column(String(100), unique=True, nullable=False, index=True)
 
-    books: Mapped[list["BooksOrm"]] = relationship(  # type: ignore[name-defined]
-        secondary= "book_genre", back_populates="genres"
-    )
+    books: Mapped[List["BooksOrm"]] = relationship(secondary="book_genre",back_populates="genres", lazy="selectin")
 
 
 # ---------- Ассоциация Book-Genre (many-to-many) ----------

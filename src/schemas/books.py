@@ -12,21 +12,22 @@ class BookBase(BaseModel):
     file_path: str
 
 class BookCreate(BookBase):
-    genre_ids: List[UUID4] = []  # список UUID жанров
+    genre_ids: List[UUID4] = []
+    author_id: Optional[UUID4] = None
 
 class BookUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     cover_image: Optional[str] = None
     file_path: Optional[str] = None
-    genre_ids: Optional[List[UUID4]]  # если передан, обновляем связи
+    genre_ids: Optional[List[UUID4]]
 
 
 class BookRead(BookBase):
     id: UUID4
     upload_date: datetime
     author_id: UUID4
-    rating: float
+    rating: float = 0.0
     genres: List[GenreRead] = []
 
     class Config:
