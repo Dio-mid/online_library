@@ -4,10 +4,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 import uuid
 
-from src.database import get_db
-from src.dependencies.dependencies import get_current_active_user, RoleEnum
+from src.dependencies.database_dep import get_db
+from src.dependencies.auth_and_users_dep import get_current_active_user
 from src.models import AuthorsOrm, BooksOrm, GenresOrm
 from src.schemas.books import BookRead, BookCreate, BookUpdate
+from src.utilis.enums import RoleEnum
 
 router = APIRouter(prefix="/books", tags=["books"])
 

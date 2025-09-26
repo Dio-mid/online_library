@@ -9,7 +9,6 @@ from src.database import Base, uuid_pk
 
 class FavouritesOrm(Base):
     __tablename__ = "favourites"
-    # composite primary key: user_id + book_id
     user_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
     book_id: Mapped[uuid.UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("books.id", ondelete="CASCADE"), primary_key=True)
 

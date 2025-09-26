@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database import get_db
+from src.dependencies.database_dep import get_db
 from src.models import UsersOrm
 from src.schemas.auth import Token
 from src.schemas.users import UserRead, UserCreate

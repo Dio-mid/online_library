@@ -3,10 +3,11 @@ from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
 
-from src.database import get_db
-from src.dependencies.dependencies import get_current_active_user, RoleEnum
+from src.dependencies.database_dep import get_db
+from src.dependencies.auth_and_users_dep import get_current_active_user
 from src.models import UsersOrm, AuthorsOrm
 from src.schemas.authors import AuthorRead, AuthorCreate, AuthorUpdate
+from src.utilis.enums import RoleEnum
 
 router = APIRouter(prefix="/authors", tags=["authors"])
 

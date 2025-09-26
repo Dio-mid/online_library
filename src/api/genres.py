@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database import get_db
-from src.dependencies.dependencies import get_admin_user
+from src.dependencies.database_dep import get_db
+from src.dependencies.auth_and_users_dep import get_admin_user
 from src.models import GenresOrm
 from src.schemas.genres import GenreRead, GenreCreate
 

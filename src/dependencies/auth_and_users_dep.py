@@ -4,7 +4,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database import get_db
+from src.dependencies.database_dep import get_db
 from src.models import UsersOrm
 from src.schemas.auth import TokenData
 from src.security import decode_access_token
@@ -59,6 +59,3 @@ async def self_or_admin(user_id: uuid.UUID, current_user: UsersOrm = Depends(get
     if current_user.role != RoleEnum.ADMIN.value:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Недостаточно прав")
     return current_user
-
-
-

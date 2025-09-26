@@ -4,12 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException, Body, status
 from sqlalchemy import select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.database import get_db
-from src.dependencies.dependencies import get_current_active_user, self_or_admin
+from src.dependencies.database_dep import get_db
+from src.dependencies.auth_and_users_dep import get_current_active_user, self_or_admin
 from src.models import UsersOrm
 from src.schemas.users import UserRead, UserUpdateSelf, UserUpdateAdmin
-
 from src.security import hash_password
+from src.utilis.enums import RoleEnum
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

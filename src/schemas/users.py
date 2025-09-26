@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr, UUID4, Field
 
-from src.dependencies.dependencies import RoleEnum
+from src.dependencies.auth_and_users_dep import RoleEnum
 
 
 class UserRead(BaseModel):
