@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr, UUID4, Field
 
-from src.dependencies.auth_and_users_dep import RoleEnum
+from src.utilis.enums import RoleEnum
 
 
 class UserRead(BaseModel):
@@ -11,8 +11,7 @@ class UserRead(BaseModel):
     is_active: bool
     role: RoleEnum
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
 
 class UserCreate(BaseModel):
     username: str
@@ -31,3 +30,13 @@ class UserUpdateAdmin(BaseModel):
     password: Optional[str] = Field(None, min_length=6)
     role: Optional[RoleEnum] = None
     is_active: Optional[bool] = None
+
+class UserInDB(BaseModel):
+    id: UUID4
+    username: str
+    email: EmailStr
+    hashed_password: str
+    is_active: bool
+    role: RoleEnum
+
+    model_config = {"from_attributes": True}

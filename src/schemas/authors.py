@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, Field
 
 class AuthorBase(BaseModel):
     bio: Optional[str]
@@ -15,5 +15,4 @@ class AuthorRead(AuthorBase):
     id: UUID4
     user_id: UUID4
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}

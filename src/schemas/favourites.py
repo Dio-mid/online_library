@@ -8,5 +8,4 @@ class FavouriteRead(BaseModel):
     user_id: UUID
     book_id: UUID
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}

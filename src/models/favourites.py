@@ -4,7 +4,8 @@ from sqlalchemy import ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 
-from src.database import Base, uuid_pk
+from src.database import Base
+from src.utilis.columns import uuid_pk
 
 
 class FavouritesOrm(Base):

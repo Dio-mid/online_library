@@ -3,8 +3,9 @@ import uuid
 from sqlalchemy import String, Boolean, text, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.database import Base, uuid_pk
+from src.database import Base
 from src.utilis.enums import RoleEnum
+from src.utilis.columns import uuid_pk
 
 
 

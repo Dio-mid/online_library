@@ -3,50 +3,42 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select, insert
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi.security import OAuth2PasswordRequestForm
 
-from src.dependencies.database_dep import get_db
+from src.dependencies.deps import DBDep
 from src.models import UsersOrm
 from src.schemas.auth import Token
-from src.schemas.users import UserRead, UserCreate
+from src.schemas.users import UserRead, UserCreate, UserInDB
 from src.security import hash_password, verify_password, create_access_token, settings
-from fastapi.security import OAuth2PasswordRequestForm
+from src.utilis.enums import RoleEnum
 
 router = APIRouter(prefix="/auth", tags=["Authorization and Authentication"])
 
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-async def register(user: UserCreate, db: AsyncSession = Depends(get_db)):
-    exists = await db.execute(
-        select(UsersOrm).where((UsersOrm.username == user.username) | (UsersOrm.email == user.email))
-    )
-    if exists.scalar_one_or_none():
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists")
+async def register(user: UserCreate, db: DBDep):
+    if await db.users.get_one(username=user.username) or await db.users.get_one(email=user.email):
+        raise HTTPException(status_code=400, detail="User already exists")
 
-    stmt = (
-        insert(UsersOrm)
-        .values(
-            id=uuid.uuid4(),
-            username=user.username,
-            email=user.email,
-            hashed_password=hash_password(user.password),
-            role="user",
-            is_active=True,
-        )
-        .returning(UsersOrm)
-    )
-    result = await db.execute(stmt)
-    new_user = result.scalar_one()
-    await db.commit()
+    user_data_dict = user.model_dump(exclude={"password"})
+    user_data_dict.update({
+        "id": uuid.uuid4(),
+        "hashed_password": hash_password(user.password),
+        "role": RoleEnum.USER,
+        "is_active": True,
+    })
+
+    new_user = await db.users.create(user_data_dict)
     return new_user
 
 
 @router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(UsersOrm).where(UsersOrm.username == form_data.username))
-    user = result.scalar_one_or_none()
+async def login_for_access_token(db: DBDep, form_data: OAuth2PasswordRequestForm = Depends()):
+    user = await db.users.get_one(username=form_data.username)
+
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=401,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
@@ -56,4 +48,3 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
     )
     return {"access_token": access_token, "token_type": "bearer"}
-

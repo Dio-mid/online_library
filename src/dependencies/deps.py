@@ -3,19 +3,28 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from typing import Annotated
 
-from src.dependencies.database_dep import get_db
+from src.database import async_session_maker
 from src.models import UsersOrm
 from src.schemas.auth import TokenData
 from src.security import decode_access_token
 from src.utilis.enums import RoleEnum
+from src.utilis.db_manager import DBManager
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
+async def get_db():
+    async with DBManager(session_factory=async_session_maker) as db:
+        yield db
+
+
+DBDep = Annotated[DBManager, Depends(get_db)]
+
 async def get_current_user(
+    db: DBDep,
     token: str = Depends(oauth2_scheme),
-    db: AsyncSession = Depends(get_db),
 ) -> UsersOrm:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -25,8 +34,7 @@ async def get_current_user(
     payload = decode_access_token(token)
     data = TokenData(**payload)
 
-    result = await db.execute(select(UsersOrm).where(UsersOrm.id == data.user_id))
-    user = result.scalar_one_or_none()
+    user = await db.users.get_one(id=data.user_id)
     if not user or not user.is_active:
         raise credentials_exception
     return user

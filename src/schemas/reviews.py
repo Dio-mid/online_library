@@ -21,5 +21,14 @@ class ReviewRead(ReviewBase):
     book_id: UUID
     created_at: datetime
 
-    class Config:
-        orm_mode = True
+    model_config = {"from_attributes": True}
+
+class ReviewInDB(BaseModel):
+    id: UUID
+    user_id: UUID
+    book_id: UUID
+    text: str
+    rating: float
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
