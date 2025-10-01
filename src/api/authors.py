@@ -1,10 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select, insert, update, delete
-from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
 
 from src.dependencies.deps import get_current_active_user, DBDep
-from src.models import UsersOrm, AuthorsOrm
 from src.schemas.authors import AuthorRead, AuthorCreate, AuthorUpdate
 from src.utilis.enums import RoleEnum
 
