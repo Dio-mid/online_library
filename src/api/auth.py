@@ -1,14 +1,11 @@
 import uuid
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select, insert
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.dependencies.deps import DBDep
-from src.models import UsersOrm
 from src.schemas.auth import Token
-from src.schemas.users import UserRead, UserCreate, UserInDB
+from src.schemas.users import UserRead, UserCreate
 from src.security import hash_password, verify_password, create_access_token, settings
 from src.utilis.enums import RoleEnum
 

@@ -1,11 +1,8 @@
 import uuid
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, Body, status
-from sqlalchemy import select, update, delete
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, HTTPException, status
 
-from src.dependencies.deps import get_current_active_user, self_or_admin, DBDep
-from src.models import UsersOrm
+from src.dependencies.deps import get_current_active_user, DBDep
 from src.schemas.users import UserRead, UserUpdateSelf, UserUpdateAdmin
 from src.security import hash_password
 from src.utilis.enums import RoleEnum

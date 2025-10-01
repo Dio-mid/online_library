@@ -1,11 +1,8 @@
 import uuid
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select, insert, update, delete
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, HTTPException, status
 
 from src.dependencies.deps import get_admin_user, DBDep
-from src.models import GenresOrm
 from src.schemas.genres import GenreRead, GenreCreate
 
 router = APIRouter(prefix="/genres", tags=["Genres"])
