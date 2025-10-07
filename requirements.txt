@@ -22,6 +22,7 @@ httpcore==1.0.9
 httptools==0.6.4
 httpx==0.28.1
 idna==3.10
+iniconfig==2.1.0
 ipython==9.4.0
 ipython_pygments_lexers==1.1.1
 jedi==0.19.2
@@ -32,8 +33,10 @@ markdown-it-py==4.0.0
 MarkupSafe==3.0.2
 matplotlib-inline==0.1.7
 mdurl==0.1.2
+packaging==25.0
 parso==0.8.4
 passlib==1.7.4
+pluggy==1.6.0
 prompt_toolkit==3.0.51
 pure_eval==0.2.3
 pydantic==2.11.9
@@ -41,6 +44,7 @@ pydantic-settings==2.10.1
 pydantic_core==2.33.2
 Pygments==2.19.2
 PyJWT==2.10.1
+pytest==8.4.2
 python-dotenv==1.1.1
 python-multipart==0.0.20
 PyYAML==6.0.2

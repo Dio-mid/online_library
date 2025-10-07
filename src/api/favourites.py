@@ -1,11 +1,8 @@
 import uuid
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select, insert, delete
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.dependencies.deps import get_current_active_user, get_basic_user, DBDep
-from src.models import FavouritesOrm, BooksOrm
+from src.dependencies.deps import get_current_active_user, DBDep
 from src.schemas.favourites import FavouriteRead, FavouriteCreate
 
 router = APIRouter(prefix="/favourites", tags=["Favourites"])
