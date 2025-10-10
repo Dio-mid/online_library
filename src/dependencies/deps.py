@@ -64,6 +64,6 @@ get_basic_user = Depends(role_checker(RoleEnum.USER, RoleEnum.AUTHOR, RoleEnum.A
 async def self_or_admin(user_id: uuid.UUID, current_user: UsersOrm = Depends(get_current_active_user)):
     if current_user.id == user_id:
         return current_user
-    if current_user.role != RoleEnum.ADMIN.value:
+    if current_user.role != RoleEnum.ADMIN:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Недостаточно прав")
     return current_user

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 import uuid
+from fastapi_cache.decorator import cache
 
 from src.dependencies.deps import get_current_active_user, DBDep
 from src.schemas.authors import AuthorRead, AuthorCreate, AuthorUpdate
@@ -7,6 +8,14 @@ from src.utilis.enums import RoleEnum
 
 router = APIRouter(prefix="/authors", tags=["authors"])
 
+
+@router.get("/{author_id}", response_model=AuthorRead)
+@cache(expire=10*60)
+async def get_author(author_id: uuid.UUID, db: DBDep):
+    author = await db.authors.get_one(id=author_id)
+    if not author:
+        raise HTTPException(status_code=404, detail="Author not found")
+    return author
 
 @router.post("/", response_model=AuthorRead, status_code=status.HTTP_201_CREATED)
 async def create_author(payload: AuthorCreate, db: DBDep, current_user=Depends(get_current_active_user)):

@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from src.dependencies.deps import get_current_active_user, DBDep
 from src.schemas.reviews import ReviewRead, ReviewCreate, ReviewUpdate
 from src.utilis.enums import RoleEnum
+from src.tasks.notifications import send_notification_to_author
 
 router = APIRouter(prefix="/reviews", tags=["reviews"])
 
@@ -23,6 +24,9 @@ async def create_review(payload: ReviewCreate, db: DBDep, current_user=Depends(g
         "user_id": current_user.id
     }
     review = await db.reviews.create(review_data)
+
+    send_notification_to_author.delay(str(payload.book_id), str(current_user.id))
+
     return review
 
 

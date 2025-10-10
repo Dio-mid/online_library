@@ -3,10 +3,11 @@ from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
+from src.config import settings
 from src.dependencies.deps import DBDep
 from src.schemas.auth import Token
 from src.schemas.users import UserRead, UserCreate
-from src.security import hash_password, verify_password, create_access_token, settings
+from src.security import hash_password, verify_password, create_access_token
 from src.utilis.enums import RoleEnum
 
 router = APIRouter(prefix="/auth", tags=["Authorization and Authentication"])

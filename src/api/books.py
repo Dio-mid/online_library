@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
 import uuid
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_cache.decorator import cache
 
 from src.dependencies.deps import get_current_active_user, DBDep
 from src.schemas.books import BookRead, BookCreate, BookUpdate
@@ -8,6 +9,7 @@ from src.utilis.enums import RoleEnum
 router = APIRouter(prefix="/books", tags=["books"])
 
 @router.get("/{book_id}", response_model=BookRead)
+@cache(expire=10*60)
 async def get_book(book_id: uuid.UUID, db: DBDep):
     book = await db.books.get_one(id=book_id)
     if not book:

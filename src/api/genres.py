@@ -13,14 +13,6 @@ async def list_genres(db: DBDep):
     return await db.genres.get_many()
 
 
-@router.get("/{genre_id}", response_model=GenreRead)
-async def get_genre(genre_id: uuid.UUID, db: DBDep):
-    genre = await db.genres.get_one(id=genre_id)
-    if not genre:
-        raise HTTPException(status_code=404, detail="Genre not found")
-    return genre
-
-
 @router.post("", response_model=GenreRead, status_code=status.HTTP_201_CREATED, dependencies=[get_admin_user])
 async def create_genre(payload: GenreCreate, db: DBDep):
     genre_data = payload.model_copy(update={"id": uuid.uuid4()})
