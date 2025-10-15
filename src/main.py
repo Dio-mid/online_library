@@ -1,7 +1,10 @@
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
 import uvicorn
 
 sys.path.append(
@@ -16,7 +19,18 @@ from src.api.genres import router as router_genres
 from src.api.reviews import router as router_reviews
 from src.api.favourites import router as router_favourites
 
-app = FastAPI()
+from src.init import redis_manager
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await redis_manager.connect()
+    FastAPICache.init(RedisBackend(redis_manager.redis), prefix="fastapi-cache")
+    yield
+    await redis_manager.close()
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.include_router(router_auth)
 app.include_router(router_users)
